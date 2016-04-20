@@ -22,19 +22,26 @@ fn main() {
                                .help("bin size")
                                .required(true)
                                .index(1))
+                          .arg(Arg::with_name("tolerance")
+                               .help("bin size")
+                               .short("t")
+                               .takes_value(true)
+                               .required(true))
                           .get_matches();
 
     let max = matches.value_of("binSize").unwrap().parse::<u32>().unwrap();
 
     let size_file = matches.value_of("sizes").unwrap();
 
-    println!("pack contents of {} with max size {}", size_file, max);
+    let tolerance = matches.value_of("tolerance").unwrap().parse::<u32>().unwrap();
+
+    println!("pack contents of {} with max_size={} and tolerance={}", size_file, max, tolerance);
 
     let lines = process_file(size_file).unwrap();
 
     println!("found {} lines", lines.len());
 
-    let bins = bin_pack(max, lines);
+    let bins = bin_pack(max, tolerance, lines);
 
     println!("bins={}", bins);
 }
@@ -57,8 +64,8 @@ fn process_file(file_name : &str) -> Result<Vec<u32>, Error> {
     Ok(raw_list)
 }
 
-fn bin_pack(max : u32, sizes : Vec<u32>) -> u32 {
-    println!("bin packing {} elements into size {}", sizes.len(), max);
+fn bin_pack(max : u32, tolerance : u32, sizes : Vec<u32>) -> u32 {
+    println!("bin packing {} elements into size {} with tolerance={}", sizes.len(), max, tolerance);
 
     let mut new_sizes : Vec<u32>= Vec::new();
     for size in sizes {
@@ -74,7 +81,7 @@ fn bin_pack(max : u32, sizes : Vec<u32>) -> u32 {
               if result.1 + item > max {
                   (result.0 + 1, *item)
               } else {
-                  (result.0, result.1 + *item)
+                  (result.0, result.1 + *item + tolerance)
               }
         });
         //.1;
