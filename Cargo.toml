@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Tyler Southwick <tyler@northfuse.net>"]
 
 [dependencies]
+clap = "2.3.0"
