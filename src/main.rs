@@ -1,6 +1,6 @@
 extern crate clap;
 
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
 
 fn main() {
     println!("Hello, world!");
@@ -23,7 +23,7 @@ fn main() {
 
     let max = matches.value_of("binSize").unwrap();
 
-    let sizeFile = matches.value_of("sizes").unwrap();
+    let size_file = matches.value_of("sizes").unwrap();
 
-    println!("pack contents of {} with max size {}", sizeFile, max);
+    println!("pack contents of {} with max size {}", size_file, max);
 }
